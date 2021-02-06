@@ -1,0 +1,19 @@
+form
+{
+overflow: hidden;
+}
+
+input[type=range]
+{
+
+
+    width: 100px;
+    height: 175px;
+    padding: 0 5px;
+}
+
+input[type=range][orient=vertical]
+{
+writing-mode: bt-lr; /* IE */    
+-webkit-appearance: slider-vertical; /* WebKit */
+}

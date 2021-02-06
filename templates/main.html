@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+
+
+    <title>Slider</title>
+  </head>
+<body scroll="no" style="overflow: hidden;position: fixed">
+    <img id="bg" src="{{ url_for('video_feed') }}">
+    <div class="container" id="control_panel_1">
+      <form action="/" method ="post" enctype="multipart/form-data" id="form">
+      <div class="row">
+
+              <button class="btn btn-primary" button type="submit" name="button" value="button-play">Connect to Technic Hub</button>
+              <button class="btn btn-primary" button type="submit" name="button" value="button-exit">Disconnect from Technic Hub</button>
+              <div id="newline"></div>    
+              <input id="slide_direction" type="range" min="-80" max="80" step="10" value="0" name="slide_direction">
+
+              <input id="slide_power" orient="vertical" type="range" min="-100" max="100" step="10" value="0" name="slide_power">
+              <div id="sliderAmount"></div>              
+<div id="sliderpowerAmount"></div>
+
+
+   </div>
+</div>
+  </form>
+
+    <!--- SCRIPTS --->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+<script>
+  var slide_direction = document.getElementById('slide_direction'),
+    sliderDiv = document.getElementById('sliderAmount');
+  
+    const downloadToFile = (content, filename, contentType) => {
+    const a = document.createElement('a');
+    const file = new Blob([content], {type: contentType});
+    a.href= URL.createObjectURL(file);
+    a.download = filename;
+    a.click();
+
+	  URL.revokeObjectURL(a.href);
+};
+    
+
+slide_direction.onchange = function() {
+    sliderDiv.innerHTML = this.value;
+    downloadToFile(document.getElementById('bg').innerHTML, 'my_pic.jpg', 'image');
+    downloadToFile(sliderDiv.innerHTML, 'my-new-file.txt', 'text/plain');
+
+    $.post({
+            url: '/',
+            data: $('form').serialize(),
+            success: function(response){
+                //alert(response);
+                //alert(JSON.parse(response).direction); // works with json.dumps()
+                console.log(response);
+            },
+            error: function(error){
+                alert(response);
+                console.log(error);
+            }
+        });
+}
+</script>
+<script>
+
+  var slide_power = document.getElementById('slide_power'),
+    sliderpowerDiv = document.getElementById('sliderpowerAmount'); 
+slide_power.onchange = function() {
+    sliderpowerDiv.innerHTML = this.value;
+    $.post({
+            url: '/',
+            data: $('form').serialize(),
+            success: function(response){
+                //alert(response);
+                //alert(JSON.parse(response).power); // works with json.dumps()
+                console.log(response);
+            },
+            error: function(error){
+                alert(response);
+                console.log(error);
+            }
+        });
+}
+
+</script>
+</html>
